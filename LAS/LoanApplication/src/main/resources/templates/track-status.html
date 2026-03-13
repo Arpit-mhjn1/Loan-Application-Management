@@ -1,0 +1,59 @@
+<!-- src/main/resources/templates/track-status.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Track Loan Status</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">🔍 Track Your Loan Application</h2>
+
+    <!-- Form -->
+    <form action="/track/status" method="get" class="mb-4">
+        <div class="mb-3">
+            <label for="input" class="form-label">📧 Enter Email or Application ID:</label>
+            <input type="text" class="form-control" id="input" name="input"
+                   placeholder="e.g. john.doe@email.com or 101" required>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Check Status</button>
+        </div>
+    </form>
+
+    <!-- Application Found -->
+    <div class="alert alert-light border fade-in" th:if="${myapplication != null}">
+        <h5>👤 Applicant: <span th:text="${myapplication.fullName}"></span></h5>
+        <p>
+            <strong>Status:</strong>
+            <span th:switch="${myapplication.status}">
+                <span th:case="'APPROVED'" class="fw-bold text-success" th:text="${myapplication.status}"></span>
+                <span th:case="'REJECTED'" class="fw-bold text-danger" th:text="${myapplication.status}"></span>
+                <span th:case="*" class="fw-bold text-warning" th:text="${myapplication.status}"></span>
+            </span>
+        </p>
+
+        <!-- ✅ Show Comment if Rejected -->
+        <div th:if="${myapplication.status == 'REJECTED'}">
+            <p><strong>📝 Rejection Reason:</strong>
+                <span class="text-muted fst-italic" th:text="${myapplication.comment ?: 'No reason provided'}"></span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Not Found -->
+    <div class="alert alert-danger fade-in mt-3" th:if="${notFound}">
+        ❌ No application found with the provided email or ID.
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f6fa;
+        }
+
+        .navbar {
+            background-color: #2f3640;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .logout-btn {
+            background-color: #e84118;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        h3 {
+            color: #2f3640;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #dcdde1;
+        }
+
+        tr:hover {
+            background-color: #f1f2f6;
+        }
+
+        .status {
+            padding: 5px 10px;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        .PENDING {
+            background-color: #fbc531;
+            color: #2f3640;
+        }
+
+        .APPROVED {
+            background-color: #4cd137;
+            color: white;
+        }
+
+        .REJECTED {
+            background-color: #e84118;
+            color: white;
+        }
+
+        .actions button {
+            margin-right: 8px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background-color: #0097e6;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #c23616;
+            color: white;
+        }
+
+        .no-apps {
+            text-align: center;
+            color: #888;
+            margin-top: 30px;
+        }
+
+        .apply-btn {
+            background-color: #44bd32;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+
+        .apply-btn:hover {
+            background-color: #4cd137;
+        }
+
+        .rejection-comment {
+            margin-top: 5px;
+            font-style: italic;
+            font-size: 13px;
+            color: #e84118;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <h2 th:text="'Welcome, ' + ${user.firstName} + ' ' + ${user.lastName}">Welcome, User</h2>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="logout-btn">Logout</button>
+    </form>
+</div>
+
+<div class="container">
+    <h3>Your Loan Applications</h3>
+
+    <table th:if="${not #lists.isEmpty(loans)}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Amount</th>
+                <th>Loan Type</th>
+                <th>Monthly Income</th>
+                <th>Employment</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="loan : ${loans}">
+                <td th:text="${loan.id}">1</td>
+                <td th:text="${loan.loanAmount}">50000</td>
+                <td th:text="${loan.loanType}">Personal</td>
+                <td th:text="${loan.monthlyIncome}">20000</td>
+                <td th:text="${loan.employmentType}">Salaried</td>
+                <td th:text="${loan.reason}">Business Expansion</td>
+                <td>
+                    <span th:text="${loan.status}" th:class="'status ' + ${loan.status}">Pending</span>
+                    <div th:if="${loan.status == 'REJECTED'}" class="rejection-comment">
+                        Reason: <span th:text="${loan.comment ?: 'Not specified'}"></span>
+                    </div>
+                </td>
+                <td class="actions">
+                    <button th:if="${loan.status == 'DRAFT'}"
+                            th:onclick="'location.href=\'/loan/edit/' + ${loan.id} + '\'" class="edit-btn">Edit</button>
+
+                    <button class="delete-btn"
+                            th:onclick="'javascript:confirmDelete(\'/loan/delete/' + ${loan.id} + '\')'">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="no-apps" th:if="${#lists.isEmpty(loans)}">
+        <p>You have not applied for any loans yet.</p>
+        <a th:href="@{/loan/form}">
+            <button class="apply-btn">Apply for Loan</button>
+        </a>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(url) {
+        if (confirm("Are you sure you want to delete this loan application?")) {
+            window.location.href = url;
+        }
+    }
+</script>
+
+</body>
+</html>
