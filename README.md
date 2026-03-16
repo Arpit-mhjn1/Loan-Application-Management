@@ -1,6 +1,5 @@
 # Loan-Application-Management
 Java | SpringBoot | Thymeleaf | PostgreSQL
-# Loan Application Management
 
 ## Project Overview
 
@@ -46,7 +45,7 @@ Secure database storage for user and loan details
 ---
 
 ## Project Structure
-
+```
 Loan-Application-System
 │
 ├── src/
@@ -62,7 +61,7 @@ Loan-Application-System
 │   └── SRS_Document.pdf
 │
 └── README.md
-
+```
 
 ---
 
