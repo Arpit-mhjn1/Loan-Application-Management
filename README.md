@@ -97,8 +97,4 @@ Computer Engineering Student
 
 ## License
 This project is created for academic and learning purposes.
-
-GitHub profile boost
-
-
-It will make your project look 10× more professional. 🚀
+GitHub profile boost 🚀
