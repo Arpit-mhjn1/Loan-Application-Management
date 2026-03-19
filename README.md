@@ -1,4 +1,4 @@
-# Loan-Application-Management
+# Loan-Application-Management-System
 Java | SpringBoot | Thymeleaf | PostgreSQL
 
 ## Project Overview
