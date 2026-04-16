@@ -1,7 +1,7 @@
 # Loan-Application-Management-System
 Java | SpringBoot | Thymeleaf | PostgreSQL
 
-## Project Overview
+## Project's Overview
 
 The Loan Application Management System is a Java-based application designed to streamline and automate the process of managing loan applications. The system enables users to submit loan requests, while administrators can review, approve, or reject applications efficiently.
 
